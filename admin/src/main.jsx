@@ -552,7 +552,7 @@ function Dashboard({ admin, onLogout }) {
                             </span>
                           </td>
                           <td style={{ whiteSpace: 'nowrap', color: '#53627e', fontSize: '0.85em' }}>
-                            {new Date(lead.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            {new Date(lead.createdAt).toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                           </td>
                         </tr>
                       ))}
