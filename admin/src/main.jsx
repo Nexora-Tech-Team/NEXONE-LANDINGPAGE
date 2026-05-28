@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
@@ -137,6 +137,9 @@ function Dashboard({ admin, onLogout }) {
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotif, setShowNotif] = useState(false);
+  const knownLeadIds = useRef(null);
 
   async function load() {
     setLoading(true); setError('');
@@ -151,8 +154,29 @@ function Dashboard({ admin, onLogout }) {
       const sd = await sRes.json(); const ld = await lRes.json();
       if (!sRes.ok || !lRes.ok) throw new Error(sd.error || ld.error || 'Failed to load');
       setStats(sd.stats);
-      setLeads(ld.leads || []);
+      const freshLeads = ld.leads || [];
+      setLeads(freshLeads);
       setRefreshKey((k) => k + 1);
+      if (knownLeadIds.current === null) {
+        knownLeadIds.current = new Set(freshLeads.map((l) => l.id));
+      } else {
+        const newOnes = freshLeads.filter((l) => !knownLeadIds.current.has(l.id));
+        if (newOnes.length > 0) {
+          const bySource = {};
+          newOnes.forEach((l) => {
+            const src = l.source === 'manual' ? 'Manual' : 'Landing Page (Web)';
+            bySource[src] = (bySource[src] || 0) + 1;
+          });
+          const msgs = Object.entries(bySource).map(([src, count]) => ({
+            id: `${Date.now()}-${src}`,
+            text: `${count} lead${count > 1 ? 's' : ''} baru dari ${src}`,
+            time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+            read: false,
+          }));
+          setNotifications((prev) => [...msgs, ...prev].slice(0, 20));
+          newOnes.forEach((l) => knownLeadIds.current.add(l.id));
+        }
+      }
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
   }
@@ -282,6 +306,39 @@ function Dashboard({ admin, onLogout }) {
             <h1>{section === 'dashboard' ? 'Dashboard Monitoring Leads NEXONE' : 'Manage Leads'}</h1>
           </div>
           <div className="admin-pill">
+            <div className="notif-wrap">
+              <button
+                className="notif-btn"
+                onClick={() => {
+                  setShowNotif((o) => !o);
+                  setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+                }}
+                title="Notifikasi"
+              >
+                🔔
+                {notifications.filter((n) => !n.read).length > 0 && (
+                  <span className="notif-badge">{notifications.filter((n) => !n.read).length}</span>
+                )}
+              </button>
+              {showNotif && (
+                <div className="notif-dropdown">
+                  <div className="notif-header">Notifikasi</div>
+                  {notifications.length === 0 ? (
+                    <div className="notif-empty">Belum ada notifikasi</div>
+                  ) : (
+                    notifications.map((n) => (
+                      <div key={n.id} className="notif-item">
+                        <span className="notif-dot">🟢</span>
+                        <div className="notif-body">
+                          <p>{n.text}</p>
+                          <small>{n.time}</small>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
             <span>{admin?.email || 'Admin'}</span>
           </div>
         </header>
