@@ -161,7 +161,7 @@ function Dashboard({ admin, onLogout }) {
 
   useEffect(() => {
     if (section !== 'dashboard') return;
-    const id = setInterval(load, 5000);
+    const id = setInterval(load, 10000);
     return () => clearInterval(id);
   }, [section]);
 
