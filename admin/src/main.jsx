@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8089';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8089';
 const statusOptions = ['new', 'contacted', 'qualified', 'closed', 'lost'];
 
 function apiFetch(path, options = {}) {
@@ -49,8 +49,8 @@ function App() {
 }
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('admin@nexone.local');
-  const [password, setPassword] = useState('Admin123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
