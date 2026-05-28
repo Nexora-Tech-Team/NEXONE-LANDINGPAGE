@@ -670,6 +670,17 @@ blockquote {
   border-collapse: collapse;
   font-size: .9rem;
 }
+.leads-table th.th-no { width: 40px; text-align: center; }
+.leads-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, color .12s;
+}
+.leads-table th.sortable:hover { background: #e6efff; color: var(--blue); }
+.leads-table th.sort-active { color: var(--blue); background: #eef5ff; }
+.sort-icon { font-size: .75rem; opacity: .6; }
+.leads-table th.sort-active .sort-icon { opacity: 1; color: var(--blue); }
+
 .leads-table th {
   padding: 10px 14px;
   text-align: left;

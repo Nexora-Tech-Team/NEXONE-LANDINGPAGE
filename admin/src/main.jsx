@@ -174,6 +174,11 @@ function Dashboard({ admin, onLogout }) {
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [tblSort, setTblSort] = useState({ key: 'createdAt', dir: 'desc' });
+
+  function toggleSort(key) {
+    setTblSort((prev) => ({ key, dir: prev.key === key && prev.dir === 'asc' ? 'desc' : 'asc' }));
+  }
   const [notifications, setNotifications] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
   const knownLeadIds = useRef(null);
@@ -294,6 +299,19 @@ function Dashboard({ admin, onLogout }) {
       { label: 'Conv. Rate', value: `${conv}%`, color: '#06b6d4', icon: '📈', sub: 'Closed / Total', status: null },
     ];
   }, [stats]);
+
+  const sortedLeads = useMemo(() => {
+    const { key, dir } = tblSort;
+    return [...recentLeads].sort((a, b) => {
+      let av = a[key] ?? '';
+      let bv = b[key] ?? '';
+      if (key === 'createdAt') { av = new Date(av); bv = new Date(bv); }
+      else { av = String(av).toLowerCase(); bv = String(bv).toLowerCase(); }
+      if (av < bv) return dir === 'asc' ? -1 : 1;
+      if (av > bv) return dir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [recentLeads, tblSort]);
 
   function goLeads(status) {
     if (status) setFilterStatus(status);
@@ -529,18 +547,31 @@ function Dashboard({ admin, onLogout }) {
                   <table className="leads-table">
                     <thead>
                       <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <th>Main Need</th>
-                        <th>Status</th>
-                        <th>Source</th>
-                        <th>Date</th>
-                        <th>Time</th>
+                        <th className="th-no">No</th>
+                        {[
+                          { label: 'Name',      key: 'fullName'  },
+                          { label: 'Company',   key: 'company'   },
+                          { label: 'Main Need', key: 'mainNeed'  },
+                          { label: 'Status',    key: 'status'    },
+                          { label: 'Source',    key: 'source'    },
+                          { label: 'Date',      key: 'createdAt' },
+                          { label: 'Time',      key: 'createdAt' },
+                        ].map(({ label, key }) => (
+                          <th
+                            key={label}
+                            className={`sortable${tblSort.key === key ? ' sort-active' : ''}`}
+                            onClick={() => toggleSort(key)}
+                          >
+                            {label}
+                            <span className="sort-icon">
+                              {tblSort.key === key ? (tblSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
+                            </span>
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {recentLeads.map((lead, i) => (
+                      {sortedLeads.map((lead, i) => (
                         <tr key={lead.id}>
                           <td style={{ textAlign: 'center', color: '#53627e', fontSize: '0.85em', width: 40 }}>{i + 1}</td>
                           <td><strong>{lead.fullName}</strong></td>
