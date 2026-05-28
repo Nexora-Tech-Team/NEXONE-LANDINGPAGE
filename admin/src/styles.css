@@ -241,7 +241,7 @@ h1, h2, h3 { color: var(--navy); }
 }
 .filters {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) 160px 110px;
+  grid-template-columns: minmax(240px, 1fr) 160px 100px 110px;
   gap: 10px;
 }
 .lead-list {
@@ -403,6 +403,167 @@ blockquote {
 .modal-actions button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
 .modal-actions button.primary:hover { background: var(--blue-dark); }
 .modal-actions button.primary:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ─── Dashboard Layout ─────────────────────────── */
+.dashboard-content {
+  display: grid;
+  gap: 20px;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.kpi-card {
+  padding: 20px 18px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 8px 24px rgba(7, 27, 86, .06);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  border-top: 3px solid var(--kpi-color, var(--blue));
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--kpi-color, var(--blue));
+  opacity: 0;
+  transition: opacity .15s;
+}
+.kpi-card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(7, 27, 86, .12); }
+.kpi-card:hover::before { opacity: .04; }
+.kpi-icon { font-size: 1.5rem; margin-bottom: 10px; line-height: 1; }
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-label {
+  font-size: .75rem;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--kpi-color, var(--blue));
+}
+.kpi-sub {
+  font-size: .75rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.chart-grid {
+  display: grid;
+  gap: 20px;
+}
+.chart-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+
+.chart-card {
+  padding: 22px 24px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 8px 24px rgba(7, 27, 86, .05);
+}
+.chart-title {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+.chart-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.chart-title-row .chart-title { margin-bottom: 0; }
+
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background .12s;
+}
+.btn-text:hover { background: #eef5ff; }
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+.leads-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  background: var(--soft);
+}
+.leads-table th:first-child { border-radius: 8px 0 0 0; }
+.leads-table th:last-child { border-radius: 0 8px 0 0; }
+.leads-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #f0f4ff;
+  color: var(--ink);
+  vertical-align: middle;
+}
+.leads-table tr:last-child td { border-bottom: none; }
+.leads-table tbody tr:hover td { background: #f9fbff; }
+
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--soft);
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.nav-icon { margin-right: 8px; font-size: 1rem; }
+
+/* ─── Responsive: Dashboard ─────────────────────── */
+@media (max-width: 1280px) {
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .chart-grid.two-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
 
 @media (max-width: 1100px) {
   .admin-shell { grid-template-columns: 1fr; }
