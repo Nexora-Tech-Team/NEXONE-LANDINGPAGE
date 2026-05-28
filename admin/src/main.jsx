@@ -310,8 +310,12 @@ function Dashboard({ admin, onLogout }) {
               <button
                 className="notif-btn"
                 onClick={() => {
-                  setShowNotif((o) => !o);
-                  setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+                  if (showNotif) {
+                    setShowNotif(false);
+                    setNotifications([]);
+                  } else {
+                    setShowNotif(true);
+                  }
                 }}
                 title="Notifikasi"
               >
