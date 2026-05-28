@@ -32,17 +32,22 @@ const NEED_SHORT = {
   'Document & Approval System': 'Doc & Approval',
 };
 
+function localDateKey(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 function buildTimeData(leads) {
   const now = new Date();
   const dayMap = {};
   leads.forEach((l) => {
-    const day = l.createdAt.slice(0, 10);
+    const day = localDateKey(l.createdAt);
     dayMap[day] = (dayMap[day] || 0) + 1;
   });
   return Array.from({ length: 14 }, (_, i) => {
     const d = new Date(now);
     d.setDate(d.getDate() - (13 - i));
-    const key = d.toISOString().slice(0, 10);
+    const key = localDateKey(d);
     return {
       date: `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`,
       Leads: dayMap[key] || 0,
@@ -467,7 +472,7 @@ function Dashboard({ admin, onLogout }) {
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f4ff" />
-                    <XAxis dataKey="date" tick={{ fontSize: 10 }} interval={1} />
+                    <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
                     <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
                     <Tooltip content={<CustomTooltip />} />
                     <Area
