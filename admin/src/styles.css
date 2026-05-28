@@ -306,6 +306,84 @@ blockquote {
   border-radius: 10px;
 }
 
+.btn-add {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-add:hover { background: var(--blue-dark); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,27,86,.35);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+  padding: 24px;
+}
+.modal {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 12px 40px rgba(7,27,86,.18);
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.modal-head h2 { margin: 0; font-size: 1.2rem; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--muted);
+  line-height: 1;
+  padding: 4px 8px;
+}
+.modal-close:hover { color: var(--ink); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--navy); }
+.form-grid label.full { grid-column: 1 / -1; }
+.form-grid input, .form-grid select, .form-grid textarea {
+  border: 1.5px solid var(--line);
+  border-radius: 7px;
+  padding: 9px 12px;
+  font-size: .95rem;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+}
+.form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { border-color: var(--blue); }
+.form-grid textarea { resize: vertical; }
+.req { color: var(--red); }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+.modal-actions button { padding: 9px 22px; border-radius: 7px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--line); background: var(--soft); }
+.modal-actions button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.modal-actions button.primary:hover { background: var(--blue-dark); }
+.modal-actions button.primary:disabled { opacity: .6; cursor: not-allowed; }
+
 @media (max-width: 1100px) {
   .admin-shell { grid-template-columns: 1fr; }
   .sidebar {
