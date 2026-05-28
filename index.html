@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1270,7 +1270,7 @@
           <span class="client-logo"><img src="Asset/client/cbqa.png" alt="CBQAGLOBAL"></span>
           <span class="client-logo"><img src="Asset/client/pci-quality.png" alt="PCI-QUALITY"></span>
           <span class="client-logo"><img src="Asset/client/puseintek-DPR.jpeg" alt="PUSINTEK-DPR RI"></span>
-          <span class="client-logo"><img src="Asset/client/nexora.webp" alt="NEXORA"></span>
+          <span class="client-logo"><img src="Asset/client/nexora.webp" alt="NEXORA" style="height:54px;max-width:180px;"></span>
         </div>
       </div>
     </section>
@@ -1664,10 +1664,10 @@
     };
 
     const API_BASE_URL = window.NEXONE_API_BASE_URL ?? '';
-    let currentLang = localStorage.getItem('nexoneLang') || 'id';
+    let currentLang = localStorage.getItem('nexoneLang') || 'en';
 
     function translatePage(lang) {
-      currentLang = translations[lang] ? lang : 'id';
+      currentLang = translations[lang] ? lang : 'en';
       localStorage.setItem('nexoneLang', currentLang);
       document.documentElement.lang = currentLang;
       document.title = translations[currentLang]['doc.title'];
