@@ -49,7 +49,7 @@ function buildTimeData(leads) {
     d.setDate(d.getDate() - (29 - i));
     const key = localDateKey(d);
     return {
-      date: `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`,
+      date: `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`,
       Leads: dayMap[key] || 0,
     };
   });
