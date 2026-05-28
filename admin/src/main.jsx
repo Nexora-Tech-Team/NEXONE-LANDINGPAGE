@@ -83,20 +83,42 @@ function App() {
 }
 
 /* ─── Login ───────────────────────────────────────────── */
+function newCaptcha() {
+  const a = Math.floor(Math.random() * 9) + 1;
+  const b = Math.floor(Math.random() * 9) + 1;
+  return { a, b };
+}
+
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => localStorage.getItem('nexoneRememberEmail') || '');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(() => !!localStorage.getItem('nexoneRememberEmail'));
+  const [captcha, setCaptcha] = useState(newCaptcha);
+  const [captchaInput, setCaptchaInput] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function submit(e) {
-    e.preventDefault(); setLoading(true); setError('');
+    e.preventDefault();
+    if (parseInt(captchaInput, 10) !== captcha.a + captcha.b) {
+      setError('Jawaban verifikasi salah. Coba lagi.');
+      setCaptcha(newCaptcha());
+      setCaptchaInput('');
+      return;
+    }
+    setLoading(true); setError('');
     try {
       const res = await apiFetch('/api/v1/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || 'Login failed');
+      if (remember) localStorage.setItem('nexoneRememberEmail', email);
+      else localStorage.removeItem('nexoneRememberEmail');
       onLogin(d.token, d.admin);
-    } catch (err) { setError(err.message); }
+    } catch (err) {
+      setError(err.message);
+      setCaptcha(newCaptcha());
+      setCaptchaInput('');
+    }
     finally { setLoading(false); }
   }
 
@@ -112,6 +134,21 @@ function Login({ onLogin }) {
         <form onSubmit={submit}>
           <label>Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required /></label>
           <label>Password<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required /></label>
+          <label className="captcha-label">
+            Verifikasi: berapa {captcha.a} + {captcha.b}?
+            <input
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value)}
+              type="number"
+              placeholder="Jawaban"
+              required
+              autoComplete="off"
+            />
+          </label>
+          <label className="remember-label">
+            <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+            Ingat saya
+          </label>
           {error && <div className="error">{error}</div>}
           <button className="primary" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</button>
         </form>

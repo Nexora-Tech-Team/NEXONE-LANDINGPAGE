@@ -11,5 +11,5 @@ FROM nginx:alpine
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY index.html /usr/share/nginx/html/
 COPY Asset/ /usr/share/nginx/html/Asset/
-COPY --from=admin-builder /admin/dist/ /usr/share/nginx/html/admin/
+COPY --from=admin-builder /admin/dist/ /usr/share/nginx/html/monitoring-nexone/
 EXPOSE 80
