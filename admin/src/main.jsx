@@ -136,6 +136,7 @@ function Dashboard({ admin, onLogout }) {
   const [form, setForm] = useState(emptyForm);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   async function load() {
     setLoading(true); setError('');
@@ -151,6 +152,7 @@ function Dashboard({ admin, onLogout }) {
       if (!sRes.ok || !lRes.ok) throw new Error(sd.error || ld.error || 'Failed to load');
       setStats(sd.stats);
       setLeads(ld.leads || []);
+      setRefreshKey((k) => k + 1);
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
   }
@@ -272,7 +274,7 @@ function Dashboard({ admin, onLogout }) {
         <header className="topbar">
           <div>
             <small>NEXONE WORKSPACE</small>
-            <h1>{section === 'dashboard' ? 'Dashboard Overview' : 'Manage Leads'}</h1>
+            <h1>{section === 'dashboard' ? 'Dashboard Monitoring Leads NEXONE' : 'Manage Leads'}</h1>
           </div>
           <div className="admin-pill">
             <span>{admin?.email || 'Admin'}</span>
@@ -309,7 +311,7 @@ function Dashboard({ admin, onLogout }) {
                 <h3 className="chart-title">Status Distribution</h3>
                 {statusData.length === 0 ? <div className="chart-empty">No data yet</div> : (
                   <ResponsiveContainer width="100%" height={260}>
-                    <PieChart>
+                    <PieChart key={refreshKey}>
                       <Pie
                         data={statusData}
                         cx="50%" cy="50%"
@@ -331,7 +333,7 @@ function Dashboard({ admin, onLogout }) {
               <div className="chart-card">
                 <h3 className="chart-title">Lead Trend — 14 Days</h3>
                 <ResponsiveContainer width="100%" height={260}>
-                  <AreaChart data={timeData} margin={{ top: 8, right: 16, left: -16, bottom: 0 }}>
+                  <AreaChart key={refreshKey} data={timeData} margin={{ top: 8, right: 16, left: -16, bottom: 0 }}>
                     <defs>
                       <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#1f6bff" stopOpacity={0.25} />
@@ -360,7 +362,7 @@ function Dashboard({ admin, onLogout }) {
                 <h3 className="chart-title">Leads by Main Need</h3>
                 {needData.length === 0 ? <div className="chart-empty">No data yet</div> : (
                   <ResponsiveContainer width="100%" height={220}>
-                    <BarChart data={needData} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
+                    <BarChart key={refreshKey} data={needData} layout="vertical" margin={{ top: 0, right: 30, left: 0, bottom: 0 }}>
                       <XAxis type="number" allowDecimals={false} tick={{ fontSize: 10 }} />
                       <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 10 }} />
                       <Tooltip content={<CustomTooltip />} />
@@ -378,7 +380,7 @@ function Dashboard({ admin, onLogout }) {
                 <h3 className="chart-title">Lead Source</h3>
                 {sourceData.length === 0 ? <div className="chart-empty">No data yet</div> : (
                   <ResponsiveContainer width="100%" height={220}>
-                    <PieChart>
+                    <PieChart key={refreshKey}>
                       <Pie
                         data={sourceData}
                         cx="50%" cy="48%"
