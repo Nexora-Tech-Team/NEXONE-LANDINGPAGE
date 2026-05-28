@@ -125,7 +125,7 @@ const emptyForm = { fullName: '', company: '', email: '', phone: '', mainNeed: m
 
 function Dashboard({ admin, onLogout }) {
   const [section, setSection] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState(null);
   const [leads, setLeads] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
