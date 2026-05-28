@@ -306,6 +306,26 @@ blockquote {
   border-radius: 10px;
 }
 
+.lead-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn-delete {
+  background: none;
+  border: 1.5px solid #fca5a5;
+  color: var(--red);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-delete:hover { background: #fef2f2; }
+
 .btn-add {
   background: var(--blue);
   color: #fff;

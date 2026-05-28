@@ -216,13 +216,28 @@ func (s *Server) listLeads(w http.ResponseWriter, r *http.Request, admin adminCl
 }
 
 func (s *Server) updateLead(w http.ResponseWriter, r *http.Request, admin adminClaims) {
-	if r.Method != http.MethodPatch {
-		methodNotAllowed(w)
-		return
-	}
 	id := strings.TrimPrefix(r.URL.Path, "/api/v1/admin/leads/")
 	if id == "" || strings.Contains(id, "/") {
 		writeError(w, http.StatusNotFound, "lead not found")
+		return
+	}
+
+	if r.Method == http.MethodDelete {
+		result, err := s.db.ExecContext(r.Context(), `delete from leads where id = $1`, id)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to delete lead")
+			return
+		}
+		if n, _ := result.RowsAffected(); n == 0 {
+			writeError(w, http.StatusNotFound, "lead not found")
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	if r.Method != http.MethodPatch {
+		methodNotAllowed(w)
 		return
 	}
 	var input struct {
@@ -324,7 +339,7 @@ func (s *Server) cors(next http.Handler) http.Handler {
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 		}
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusNoContent)
 			return

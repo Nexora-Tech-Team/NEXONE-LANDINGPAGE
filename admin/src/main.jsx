@@ -156,6 +156,12 @@ function Dashboard({ admin, onLogout }) {
     if (res.ok) load();
   }
 
+  async function deleteLead(lead) {
+    if (!window.confirm(`Hapus lead "${lead.fullName}" dari ${lead.company}?`)) return;
+    const res = await apiFetch(`/api/v1/admin/leads/${lead.id}`, { method: 'DELETE' });
+    if (res.ok || res.status === 204) load();
+  }
+
   async function submitAddLead(event) {
     event.preventDefault();
     setFormLoading(true);
@@ -285,7 +291,10 @@ function Dashboard({ admin, onLogout }) {
                         onBlur={(e) => updateLead(lead, { adminNotes: e.target.value })}
                         placeholder="Internal notes"
                       />
-                      <small>{new Date(lead.createdAt).toLocaleString()}</small>
+                      <div className="lead-meta">
+                        <small>{new Date(lead.createdAt).toLocaleString()}</small>
+                        <button className="btn-delete" onClick={() => deleteLead(lead)}>Hapus</button>
+                      </div>
                     </div>
                   </article>
                 ))}
