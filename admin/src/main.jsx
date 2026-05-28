@@ -375,11 +375,22 @@ function Dashboard({ admin, onLogout }) {
                     <PieChart>
                       <Pie
                         data={sourceData}
-                        cx="50%" cy="50%"
-                        outerRadius={85}
+                        cx="50%" cy="48%"
+                        outerRadius={80}
                         dataKey="value"
-                        label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
-                        labelLine={true}
+                        labelLine={false}
+                        label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+                          if (percent < 0.05) return null;
+                          const R = Math.PI / 180;
+                          const r = innerRadius + (outerRadius - innerRadius) * 0.55;
+                          const x = cx + r * Math.cos(-midAngle * R);
+                          const y = cy + r * Math.sin(-midAngle * R);
+                          return (
+                            <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" fontSize={13} fontWeight={700}>
+                              {`${(percent * 100).toFixed(0)}%`}
+                            </text>
+                          );
+                        }}
                       >
                         {sourceData.map((_, i) => (
                           <Cell key={i} fill={CHART_COLORS[i]} />
