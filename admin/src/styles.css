@@ -134,6 +134,8 @@ button {
   color: white;
   overflow: hidden;
   transition: padding .22s ease;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-header {
   display: flex;
@@ -590,6 +592,25 @@ blockquote {
   color: var(--muted);
   white-space: nowrap;
 }
+
+.sidebar nav { flex: 1; }
+.sidebar-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.1); }
+.nav-logout {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.nav-logout:hover { color: #fca5a5; background: rgba(239,68,68,.18); }
+.admin-shell.sidebar-collapsed .nav-logout { justify-content: center; padding: 0; }
 
 .nav-icon { margin-right: 8px; font-size: 1rem; }
 .admin-shell.sidebar-collapsed .nav-icon { margin-right: 0; font-size: 1.2rem; }

@@ -267,6 +267,11 @@ function Dashboard({ admin, onLogout }) {
             <span className="nav-icon">👥</span>{sidebarOpen && ' Leads'}
           </a>
         </nav>
+        <div className="sidebar-footer">
+          <a className="nav-logout" onClick={onLogout} style={{ cursor: 'pointer' }} title="Logout">
+            <span className="nav-icon">🚪</span>{sidebarOpen && ' Logout'}
+          </a>
+        </div>
       </aside>
 
       {/* ── Workspace ── */}
@@ -278,7 +283,6 @@ function Dashboard({ admin, onLogout }) {
           </div>
           <div className="admin-pill">
             <span>{admin?.email || 'Admin'}</span>
-            <button onClick={onLogout}>Logout</button>
           </div>
         </header>
 
