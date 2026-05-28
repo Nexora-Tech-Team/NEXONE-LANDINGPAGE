@@ -203,7 +203,7 @@ function Dashboard({ admin, onLogout }) {
     const srcMap = {};
     allLeads.forEach((l) => { const s = l.source || 'landing_page'; srcMap[s] = (srcMap[s] || 0) + 1; });
     const sourceData = Object.entries(srcMap).map(([k, value]) => ({
-      name: k === 'landing_page' ? 'Landing Page' : 'Manual', value,
+      name: k === 'manual' ? 'Manual' : 'Landing Page (Web)', value,
     }));
 
     const timeData = buildTimeData(allLeads);
