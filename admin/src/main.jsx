@@ -125,6 +125,7 @@ const emptyForm = { fullName: '', company: '', email: '', phone: '', mainNeed: m
 
 function Dashboard({ admin, onLogout }) {
   const [section, setSection] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [stats, setStats] = useState(null);
   const [leads, setLeads] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
@@ -241,16 +242,21 @@ function Dashboard({ admin, onLogout }) {
   };
 
   return (
-    <main className="admin-shell">
+    <main className={`admin-shell${sidebarOpen ? '' : ' sidebar-collapsed'}`}>
       {/* ── Sidebar ── */}
       <aside className="sidebar">
-        <img src="/Asset/Logo NEXONE.png" alt="NEXONE" />
+        <div className="sidebar-header">
+          {sidebarOpen && <img src="/Asset/Logo NEXONE.png" alt="NEXONE" />}
+          <button className="sidebar-toggle" onClick={() => setSidebarOpen((o) => !o)} title={sidebarOpen ? 'Collapse' : 'Expand'}>
+            {sidebarOpen ? '‹' : '›'}
+          </button>
+        </div>
         <nav>
-          <a className={section === 'dashboard' ? 'active' : ''} onClick={() => setSection('dashboard')} style={{ cursor: 'pointer' }}>
-            <span className="nav-icon">📊</span> Dashboard
+          <a className={section === 'dashboard' ? 'active' : ''} onClick={() => setSection('dashboard')} style={{ cursor: 'pointer' }} title="Dashboard">
+            <span className="nav-icon">📊</span>{sidebarOpen && ' Dashboard'}
           </a>
-          <a className={section === 'leads' ? 'active' : ''} onClick={() => setSection('leads')} style={{ cursor: 'pointer' }}>
-            <span className="nav-icon">👥</span> Leads
+          <a className={section === 'leads' ? 'active' : ''} onClick={() => setSection('leads')} style={{ cursor: 'pointer' }} title="Leads">
+            <span className="nav-icon">👥</span>{sidebarOpen && ' Leads'}
           </a>
         </nav>
       </aside>

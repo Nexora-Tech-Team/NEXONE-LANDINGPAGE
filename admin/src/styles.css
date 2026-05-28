@@ -123,20 +123,53 @@ button {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 260px 1fr;
+  transition: grid-template-columns .22s ease;
+}
+.admin-shell.sidebar-collapsed {
+  grid-template-columns: 64px 1fr;
 }
 .sidebar {
-  padding: 28px 22px;
+  padding: 22px 14px;
   background: #06102f;
   color: white;
+  overflow: hidden;
+  transition: padding .22s ease;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  min-height: 44px;
 }
 .sidebar img {
   display: block;
-  width: 175px;
-  margin-bottom: 34px;
-  padding: 8px;
+  width: 148px;
+  padding: 7px;
   border-radius: 8px;
   background: white;
 }
+.sidebar-toggle {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.1);
+  border: none;
+  border-radius: 8px;
+  color: rgba(255,255,255,.8);
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: background .15s;
+  line-height: 1;
+  padding: 0;
+}
+.sidebar-toggle:hover { background: rgba(255,255,255,.2); }
+.admin-shell.sidebar-collapsed .sidebar { padding: 22px 10px; }
+.admin-shell.sidebar-collapsed .sidebar-header { justify-content: center; }
 .sidebar nav {
   display: grid;
   gap: 8px;
@@ -150,6 +183,12 @@ button {
   color: rgba(255,255,255,.72);
   text-decoration: none;
   font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.admin-shell.sidebar-collapsed .sidebar a {
+  justify-content: center;
+  padding: 0;
 }
 .sidebar a.active,
 .sidebar a:hover {
@@ -553,6 +592,7 @@ blockquote {
 }
 
 .nav-icon { margin-right: 8px; font-size: 1rem; }
+.admin-shell.sidebar-collapsed .nav-icon { margin-right: 0; font-size: 1.2rem; }
 
 /* ─── Responsive: Dashboard ─────────────────────── */
 @media (max-width: 1280px) {
