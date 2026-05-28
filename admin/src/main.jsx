@@ -44,9 +44,9 @@ function buildTimeData(leads) {
     const day = localDateKey(l.createdAt);
     dayMap[day] = (dayMap[day] || 0) + 1;
   });
-  return Array.from({ length: 14 }, (_, i) => {
+  return Array.from({ length: 30 }, (_, i) => {
     const d = new Date(now);
-    d.setDate(d.getDate() - (13 - i));
+    d.setDate(d.getDate() - (29 - i));
     const key = localDateKey(d);
     return {
       date: `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`,
@@ -462,7 +462,7 @@ function Dashboard({ admin, onLogout }) {
               </div>
 
               <div className="chart-card">
-                <h3 className="chart-title">Lead Trend — 14 Days</h3>
+                <h3 className="chart-title">Lead Trend — 30 Days</h3>
                 <ResponsiveContainer width="100%" height={260}>
                   <AreaChart key={refreshKey} data={timeData} margin={{ top: 8, right: 16, left: -16, bottom: 0 }}>
                     <defs>
