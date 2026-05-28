@@ -529,6 +529,7 @@ function Dashboard({ admin, onLogout }) {
                   <table className="leads-table">
                     <thead>
                       <tr>
+                        <th>No</th>
                         <th>Name</th>
                         <th>Company</th>
                         <th>Main Need</th>
@@ -539,8 +540,9 @@ function Dashboard({ admin, onLogout }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {recentLeads.map((lead) => (
+                      {recentLeads.map((lead, i) => (
                         <tr key={lead.id}>
+                          <td style={{ textAlign: 'center', color: '#53627e', fontSize: '0.85em', width: 40 }}>{i + 1}</td>
                           <td><strong>{lead.fullName}</strong></td>
                           <td>{lead.company}</td>
                           <td style={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
