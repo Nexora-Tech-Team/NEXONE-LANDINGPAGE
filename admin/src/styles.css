@@ -328,7 +328,7 @@ blockquote {
 }
 .status.closed { color: var(--green); background: #eafaf1; }
 .status.lost { color: var(--red); background: #fff0f2; }
-.status.qualified { color: #6d28d9; background: #ede9fe; }
+.status.qualified { color: #4c1d95; background: #ede9fe; }
 .status.contacted { color: var(--orange); background: #fff8ea; }
 .lead-actions {
   display: grid;
