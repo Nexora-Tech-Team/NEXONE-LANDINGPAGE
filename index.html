@@ -1663,7 +1663,7 @@
       }
     };
 
-    const API_BASE_URL = window.NEXONE_API_BASE_URL || 'http://127.0.0.1:8089';
+    const API_BASE_URL = window.NEXONE_API_BASE_URL ?? '';
     let currentLang = localStorage.getItem('nexoneLang') || 'id';
 
     function translatePage(lang) {
