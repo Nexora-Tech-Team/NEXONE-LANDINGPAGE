@@ -175,9 +175,12 @@ function Dashboard({ admin, onLogout }) {
   const [formLoading, setFormLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [tblSort, setTblSort] = useState({ key: 'createdAt', dir: 'desc' });
+  const [tblPage, setTblPage] = useState(1);
+  const TBL_ROWS = 30;
 
   function toggleSort(key) {
     setTblSort((prev) => ({ key, dir: prev.key === key && prev.dir === 'asc' ? 'desc' : 'asc' }));
+    setTblPage(1);
   }
   const [notifications, setNotifications] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
@@ -281,7 +284,7 @@ function Dashboard({ admin, onLogout }) {
     }));
 
     const timeData = buildTimeData(allLeads);
-    const recentLeads = [...allLeads].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8);
+    const recentLeads = [...allLeads].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return { statusData, needData, sourceData, timeData, recentLeads };
   }, [leads]);
@@ -542,61 +545,94 @@ function Dashboard({ admin, onLogout }) {
                 <div className="chart-empty">Loading…</div>
               ) : recentLeads.length === 0 ? (
                 <div className="chart-empty">No leads yet.</div>
-              ) : (
-                <div className="table-wrap">
-                  <table className="leads-table">
-                    <thead>
-                      <tr>
-                        <th className="th-no">No</th>
-                        {[
-                          { label: 'Name',      key: 'fullName'  },
-                          { label: 'Company',   key: 'company'   },
-                          { label: 'Main Need', key: 'mainNeed'  },
-                          { label: 'Status',    key: 'status'    },
-                          { label: 'Source',    key: 'source'    },
-                          { label: 'Date',      key: 'createdAt' },
-                          { label: 'Time',      key: 'createdAt' },
-                        ].map(({ label, key }) => (
-                          <th
-                            key={label}
-                            className={`sortable${tblSort.key === key ? ' sort-active' : ''}`}
-                            onClick={() => toggleSort(key)}
-                          >
-                            {label}
-                            <span className="sort-icon">
-                              {tblSort.key === key ? (tblSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
-                            </span>
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sortedLeads.map((lead, i) => (
-                        <tr key={lead.id}>
-                          <td style={{ textAlign: 'center', color: '#53627e', fontSize: '0.85em', width: 40 }}>{i + 1}</td>
-                          <td><strong>{lead.fullName}</strong></td>
-                          <td>{lead.company}</td>
-                          <td style={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {NEED_SHORT[lead.mainNeed] || lead.mainNeed}
-                          </td>
-                          <td><span className={`status ${lead.status}`}>{labelStatus(lead.status)}</span></td>
-                          <td>
-                            <span className="source-badge">
-                              {lead.source === 'manual' ? '✏️ Manual' : '🌐 Web'}
-                            </span>
-                          </td>
-                          <td style={{ whiteSpace: 'nowrap', color: '#53627e', fontSize: '0.85em' }}>
-                            {new Date(lead.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
-                          </td>
-                          <td style={{ whiteSpace: 'nowrap', color: '#53627e', fontSize: '0.85em' }}>
-                            {new Date(lead.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+              ) : (() => {
+                const totalPages = Math.max(1, Math.ceil(sortedLeads.length / TBL_ROWS));
+                const page = Math.min(tblPage, totalPages);
+                const pagedLeads = sortedLeads.slice((page - 1) * TBL_ROWS, page * TBL_ROWS);
+                const startNo = (page - 1) * TBL_ROWS;
+                return (
+                  <>
+                    <div className="table-wrap">
+                      <table className="leads-table">
+                        <thead>
+                          <tr>
+                            <th className="th-no">No</th>
+                            {[
+                              { label: 'Name',      key: 'fullName'  },
+                              { label: 'Company',   key: 'company'   },
+                              { label: 'Main Need', key: 'mainNeed'  },
+                              { label: 'Status',    key: 'status'    },
+                              { label: 'Source',    key: 'source'    },
+                              { label: 'Date',      key: 'createdAt' },
+                              { label: 'Time',      key: 'createdAt' },
+                            ].map(({ label, key }) => (
+                              <th
+                                key={label}
+                                className={`sortable${tblSort.key === key ? ' sort-active' : ''}`}
+                                onClick={() => toggleSort(key)}
+                              >
+                                {label}
+                                <span className="sort-icon">
+                                  {tblSort.key === key ? (tblSort.dir === 'asc' ? ' ↑' : ' ↓') : ' ⇅'}
+                                </span>
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pagedLeads.map((lead, i) => (
+                            <tr key={lead.id}>
+                              <td style={{ textAlign: 'center', color: '#53627e', fontSize: '0.85em', width: 40 }}>{startNo + i + 1}</td>
+                              <td><strong>{lead.fullName}</strong></td>
+                              <td>{lead.company}</td>
+                              <td style={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {NEED_SHORT[lead.mainNeed] || lead.mainNeed}
+                              </td>
+                              <td><span className={`status ${lead.status}`}>{labelStatus(lead.status)}</span></td>
+                              <td>
+                                <span className="source-badge">
+                                  {lead.source === 'manual' ? '✏️ Manual' : '🌐 Web'}
+                                </span>
+                              </td>
+                              <td style={{ whiteSpace: 'nowrap', color: '#53627e', fontSize: '0.85em' }}>
+                                {new Date(lead.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                              </td>
+                              <td style={{ whiteSpace: 'nowrap', color: '#53627e', fontSize: '0.85em' }}>
+                                {new Date(lead.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    {totalPages > 1 && (
+                      <div className="tbl-pagination">
+                        <span className="tbl-info">
+                          {startNo + 1}–{Math.min(page * TBL_ROWS, sortedLeads.length)} dari {sortedLeads.length} leads
+                        </span>
+                        <div className="tbl-pages">
+                          <button disabled={page === 1} onClick={() => setTblPage(1)}>«</button>
+                          <button disabled={page === 1} onClick={() => setTblPage((p) => p - 1)}>‹</button>
+                          {Array.from({ length: totalPages }, (_, i) => i + 1)
+                            .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                            .reduce((acc, p, idx, arr) => {
+                              if (idx > 0 && p - arr[idx - 1] > 1) acc.push('…');
+                              acc.push(p);
+                              return acc;
+                            }, [])
+                            .map((p, idx) =>
+                              p === '…'
+                                ? <span key={`ellipsis-${idx}`} className="tbl-ellipsis">…</span>
+                                : <button key={p} className={page === p ? 'active' : ''} onClick={() => setTblPage(p)}>{p}</button>
+                            )}
+                          <button disabled={page === totalPages} onClick={() => setTblPage((p) => p + 1)}>›</button>
+                          <button disabled={page === totalPages} onClick={() => setTblPage(totalPages)}>»</button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
           </div>

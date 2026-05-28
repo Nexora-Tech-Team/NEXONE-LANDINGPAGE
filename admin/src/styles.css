@@ -704,6 +704,42 @@ blockquote {
 .leads-table tr:last-child td { border-bottom: none; }
 .leads-table tbody tr:hover td { background: #f9fbff; }
 
+.tbl-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.tbl-info {
+  font-size: .8rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.tbl-pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.tbl-pages button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: white;
+  color: var(--ink);
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.tbl-pages button:hover:not(:disabled) { background: #eef5ff; border-color: var(--blue); color: var(--blue); }
+.tbl-pages button.active { background: var(--blue); color: white; border-color: var(--blue); }
+.tbl-pages button:disabled { opacity: .35; cursor: not-allowed; }
+.tbl-ellipsis { padding: 0 4px; color: var(--muted); font-size: .85rem; }
+
 .source-badge {
   display: inline-flex;
   align-items: center;
