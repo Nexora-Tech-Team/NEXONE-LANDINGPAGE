@@ -157,6 +157,12 @@ function Dashboard({ admin, onLogout }) {
 
   useEffect(() => { load(); }, [filterStatus]);
 
+  useEffect(() => {
+    if (section !== 'dashboard') return;
+    const id = setInterval(load, 5000);
+    return () => clearInterval(id);
+  }, [section]);
+
   async function updateLead(lead, patch) {
     const next = { status: lead.status, adminNotes: lead.adminNotes, ...patch };
     const res = await apiFetch(`/api/v1/admin/leads/${lead.id}`, { method: 'PATCH', body: JSON.stringify(next) });
