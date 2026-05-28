@@ -77,7 +77,7 @@ function Login({ onLogin }) {
     <main className="login-page">
       <section className="login-panel">
         <div className="brand-lockup">
-          <img src="/Logo NEXONE.png" alt="NEXONE" />
+          <img src="/Asset/Logo NEXONE.png" alt="NEXONE" />
           <span>Leads Admin</span>
         </div>
         <h1>Welcome back</h1>
@@ -158,7 +158,7 @@ function Dashboard({ admin, onLogout }) {
   return (
     <main className="admin-shell">
       <aside className="sidebar">
-        <img src="/Logo NEXONE.png" alt="NEXONE" />
+        <img src="/Asset/Logo NEXONE.png" alt="NEXONE" />
         <nav>
           <a className="active" href="#dashboard">Dashboard</a>
           <a href="#leads">Leads</a>
