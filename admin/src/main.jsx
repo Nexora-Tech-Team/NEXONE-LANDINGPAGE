@@ -18,12 +18,12 @@ const mainNeedOptions = [
 
 const STATUS_COLORS = {
   new: '#3b82f6',
-  contacted: '#8b5cf6',
+  contacted: '#6d28d9',
   qualified: '#f59e0b',
   closed: '#10b981',
   lost: '#ef4444',
 };
-const CHART_COLORS = ['#1f6bff', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+const CHART_COLORS = ['#1f6bff', '#6d28d9', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
 const NEED_SHORT = {
   'Integrated Business Platform': 'Integrated Platform',
   'Project & Operations Management': 'Project & Ops',
