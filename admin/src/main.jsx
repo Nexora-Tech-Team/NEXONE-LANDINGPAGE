@@ -186,12 +186,14 @@ function Dashboard({ admin, onLogout }) {
   const [showNotif, setShowNotif] = useState(false);
   const knownLeadIds = useRef(null);
 
-  async function load() {
+  async function load(opts = {}) {
     setLoading(true); setError('');
     try {
+      const status = 'status' in opts ? opts.status : filterStatus;
+      const q = 'q' in opts ? opts.q : query;
       const params = new URLSearchParams();
-      if (filterStatus !== 'all') params.set('status', filterStatus);
-      if (query) params.set('q', query);
+      if (status !== 'all') params.set('status', status);
+      if (q) params.set('q', q);
       const [sRes, lRes] = await Promise.all([
         apiFetch('/api/v1/admin/dashboard'),
         apiFetch(`/api/v1/admin/leads?${params}`),
@@ -230,7 +232,8 @@ function Dashboard({ admin, onLogout }) {
 
   useEffect(() => {
     if (section !== 'dashboard') return;
-    const id = setInterval(load, 10000);
+    load({ status: 'all', q: '' });
+    const id = setInterval(() => load({ status: 'all', q: '' }), 10000);
     return () => clearInterval(id);
   }, [section]);
 
@@ -342,7 +345,7 @@ function Dashboard({ admin, onLogout }) {
           </button>
         </div>
         <nav>
-          <a className={section === 'dashboard' ? 'active' : ''} onClick={() => setSection('dashboard')} style={{ cursor: 'pointer' }} title="Dashboard">
+          <a className={section === 'dashboard' ? 'active' : ''} onClick={() => { setFilterStatus('all'); setQuery(''); setSection('dashboard'); }} style={{ cursor: 'pointer' }} title="Dashboard">
             <span className="nav-icon">📊</span>{sidebarOpen && ' Dashboard'}
           </a>
           <a className={section === 'leads' ? 'active' : ''} onClick={() => setSection('leads')} style={{ cursor: 'pointer' }} title="Leads">
