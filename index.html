@@ -1060,6 +1060,27 @@
     .modal-card img { width: 150px; margin-bottom: 22px; }
     .modal-card h3 { margin: 0 0 6px; color: var(--navy); font-size: 27px; line-height: 1.12; }
     .modal-card p { margin: 0 0 22px; color: var(--muted); font-size: 14px; }
+    .success-check {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #18a957, #0d8a45);
+      color: white;
+      font-size: 2rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 28px rgba(24,169,87,.35);
+      animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .success-title { font-size: 30px !important; margin-bottom: 12px !important; }
+    .success-msg { font-size: 15px !important; line-height: 1.6; margin-bottom: 20px !important; color: #53627e; }
+    .success-msg strong { color: var(--navy); }
     .close {
       position: absolute;
       top: 14px;
@@ -1427,9 +1448,22 @@
   <div class="modal" data-modal>
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="demo-title">
       <button class="close" type="button" aria-label="Tutup modal" data-close-modal data-i18n-aria-label="modal.close">×</button>
-      <img src="Asset/Logo NEXONE.png" alt="NEXONE by Nexora">
-      <h3 id="demo-title" data-i18n="modal.title">Jadwalkan Demo NEXONE</h3>
-      <p data-i18n="modal.desc">Isi detail singkat berikut. Tim Nexora akan menghubungi Anda untuk sesi demo dan konsultasi kebutuhan.</p>
+
+      <!-- Form view -->
+      <div data-form-view>
+        <img src="Asset/Logo NEXONE.png" alt="NEXONE by Nexora">
+        <h3 id="demo-title" data-i18n="modal.title">Jadwalkan Demo NEXONE</h3>
+        <p data-i18n="modal.desc">Isi detail singkat berikut. Tim Nexora akan menghubungi Anda untuk sesi demo dan konsultasi kebutuhan.</p>
+      </div>
+
+      <!-- Success view -->
+      <div data-success-view style="display:none;flex-direction:column;align-items:center;text-align:center;padding:12px 0 8px">
+        <div class="success-check">✓</div>
+        <h3 class="success-title" data-i18n="success.title">Terima Kasih!</h3>
+        <p class="success-msg" data-i18n="success.msg">Tim NEXONE akan segera menghubungi Anda <strong>dalam 10 menit</strong> melalui WhatsApp untuk menjadwalkan sesi demo.</p>
+        <button class="btn" type="button" data-close-modal style="margin-top:8px;min-width:160px" data-i18n="success.close">Tutup</button>
+      </div>
+
       <form data-demo-form>
         <div class="form-grid">
           <div class="field"><label for="name" data-i18n="form.name">Nama Lengkap</label><input id="name" type="text" placeholder="Nama Anda" data-i18n-placeholder="form.namePlaceholder" required></div>
@@ -1551,7 +1585,10 @@
         'form.submit': 'Kirim Permintaan Demo',
         'form.sending': 'Mengirim...',
         'form.sent': 'Permintaan terkirim',
-        'form.failed': 'Gagal mengirim. Coba lagi.'
+        'form.failed': 'Gagal mengirim. Coba lagi.',
+        'success.title': 'Terima Kasih!',
+        'success.msg': 'Tim NEXONE akan segera menghubungi Anda <strong>dalam 10 menit</strong> melalui WhatsApp untuk menjadwalkan sesi demo.',
+        'success.close': 'Tutup'
       },
       en: {
         'doc.title': 'NEXONE - Operating System for Your Business',
@@ -1658,7 +1695,10 @@
         'form.submit': 'Send Demo Request',
         'form.sending': 'Sending...',
         'form.sent': 'Request sent',
-        'form.failed': 'Failed to send. Try again.'
+        'form.failed': 'Failed to send. Try again.',
+        'success.title': 'Thank You!',
+        'success.msg': 'The NEXONE team will contact you <strong>within 10 minutes</strong> via WhatsApp to schedule your demo session.',
+        'success.close': 'Close'
       }
     };
 
@@ -1719,6 +1759,13 @@
     });
     function closeModal() {
       modal.classList.remove('open');
+      // Reset back to form view
+      const fv = document.querySelector('[data-form-view]');
+      const sv = document.querySelector('[data-success-view]');
+      const df = document.querySelector('[data-demo-form]');
+      if (fv) fv.style.display = '';
+      if (sv) sv.style.display = 'none';
+      if (df) df.style.display = '';
       document.body.style.overflow = '';
     }
     closeButton.addEventListener('click', closeModal);
@@ -1747,10 +1794,18 @@
           })
         });
         if (!response.ok) throw new Error('Lead submission failed');
-        button.textContent = translations[currentLang]['form.sent'];
-        button.style.background = '#18a957';
         form.reset();
-        setTimeout(closeModal, 1400);
+        // Show success view
+        const formView = document.querySelector('[data-form-view]');
+        const successView = document.querySelector('[data-success-view]');
+        const t = translations[currentLang];
+        successView.querySelector('[data-i18n="success.title"]').textContent = t['success.title'];
+        successView.querySelector('[data-i18n="success.msg"]').innerHTML = t['success.msg'];
+        successView.querySelector('[data-i18n="success.close"]').textContent = t['success.close'];
+        form.style.display = 'none';
+        formView.style.display = 'none';
+        successView.style.display = 'flex';
+        return;
       } catch (error) {
         button.textContent = translations[currentLang]['form.failed'];
         button.style.background = '#ef3340';
