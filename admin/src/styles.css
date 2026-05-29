@@ -775,36 +775,115 @@ blockquote {
 .nav-icon { margin-right: 8px; font-size: 1rem; }
 .admin-shell.sidebar-collapsed .nav-icon { margin-right: 0; font-size: 1.2rem; }
 
-/* ─── Responsive: Dashboard ─────────────────────── */
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════ */
+
+/* ── Small desktop: 1280px ── */
 @media (max-width: 1280px) {
   .kpi-row { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ── Tablet landscape: 1024px ── */
+@media (max-width: 1024px) {
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .panel-head { flex-direction: column; align-items: flex-start; }
+  .filters { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Tablet portrait: 900px ── */
 @media (max-width: 900px) {
   .chart-grid.two-col { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
-  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+
+/* ── Mobile: 768px ── */
+@media (max-width: 768px) {
+  /* Workspace */
+  .workspace { padding: 14px 12px; }
+
+  /* Topbar */
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .topbar h1 { font-size: 20px; }
+  small { font-size: 10px; }
+
+  /* Admin pill */
+  .admin-pill {
+    padding: 6px 10px 6px 12px;
+    font-size: .8rem;
+    gap: 8px;
+  }
+  .admin-pill > span {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Notification dropdown */
+  .notif-dropdown { width: 270px; right: -30px; }
+
+  /* KPI */
+  .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-card { padding: 14px 12px 12px; }
+  .kpi-value { font-size: 1.6rem; }
+  .kpi-icon { font-size: 1.2rem; margin-bottom: 6px; }
+
+  /* Charts */
+  .chart-card { padding: 16px 12px 14px; }
+  .chart-title { font-size: .9rem; margin-bottom: 12px; }
+
+  /* Lead cards (Leads section) */
+  .lead-card { grid-template-columns: 1fr; }
+  .lead-actions { border-top: 1px solid var(--line); padding-top: 12px; }
+
+  /* Filters */
+  .filters { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .filters input { grid-column: 1 / -1; }
+
+  /* Pagination */
+  .tbl-pagination { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .tbl-pages { flex-wrap: wrap; gap: 3px; }
+  .tbl-pages button { min-width: 28px; height: 28px; font-size: .78rem; }
+
+  /* Modal */
+  .modal { padding: 20px 16px; }
+  .modal-overlay { padding: 12px; }
+  .form-grid { grid-template-columns: 1fr; }
+
+  /* Login */
+  .login-panel { padding: 24px 20px; }
+  .login-panel h1 { font-size: 26px; }
 }
 
-@media (max-width: 1100px) {
-  .admin-shell { grid-template-columns: 1fr; }
-  .sidebar {
-    display: flex;
-    justify-content: space-between;
-    gap: 18px;
-    align-items: center;
-  }
-  .sidebar img { margin: 0; }
-  .sidebar nav { grid-auto-flow: column; }
-  .stat-grid { grid-template-columns: repeat(3, 1fr); }
-  .panel-head { display: grid; }
-}
-@media (max-width: 760px) {
-  .workspace { padding: 18px; }
-  .topbar, .admin-pill { align-items: flex-start; }
-  .topbar, .lead-card { grid-template-columns: 1fr; display: grid; }
+/* ── Small mobile: 480px ── */
+@media (max-width: 480px) {
+  .workspace { padding: 12px 10px; }
+
+  /* Topbar */
+  .topbar h1 { font-size: 16px; }
+  .admin-pill > span { max-width: 100px; }
+
+  /* KPI: keep 2 cols but smaller */
+  .kpi-row { gap: 8px; }
+  .kpi-value { font-size: 1.4rem; }
+  .kpi-sub { display: none; }
+
+  /* Filters: stack */
   .filters { grid-template-columns: 1fr; }
-  .stat-grid { grid-template-columns: repeat(2, 1fr); }
-  .sidebar { display: grid; }
-  .sidebar nav { grid-auto-flow: row; }
+
+  /* Notification dropdown */
+  .notif-dropdown { width: 240px; right: -50px; }
+
+  /* Sidebar narrower */
+  .admin-shell.sidebar-collapsed { grid-template-columns: 52px 1fr; }
+  .admin-shell.sidebar-collapsed .sidebar { padding: 16px 6px; }
+  .sidebar-toggle { width: 28px; height: 28px; font-size: .9rem; }
+
+  /* Table: smaller font */
+  .leads-table { font-size: .78rem; }
+  .leads-table th, .leads-table td { padding: 8px 8px; }
 }
