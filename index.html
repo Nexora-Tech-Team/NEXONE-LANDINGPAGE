@@ -1768,9 +1768,8 @@
       if (df) df.style.display = '';
       document.body.style.overflow = '';
     }
-    closeButton.addEventListener('click', closeModal);
     modal.addEventListener('click', (event) => {
-      if (event.target === modal) closeModal();
+      if (event.target === modal || event.target.closest('[data-close-modal]')) closeModal();
     });
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
